@@ -2,14 +2,9 @@
 	pageEncoding="UTF-8"%>
 <%@ page import="com.example.demo.vo.MemberVO" %>
 <% 
-	MemberVO mVO = (MemberVO)session.getAttribute("mVO");
-	String s_id = null;
-	String s_name = null;
-	if(mVO != null){
-	s_id = mVO.getMem_id();
-	s_name = mVO.getMem_name();		
-	}
-	out.print(s_id+", "+s_name);
+	String smem_id = (String)session.getAttribute("smem_id");
+	String smem_name = (String)session.getAttribute("smem_name");
+	out.print(smem_id+", "+smem_name);
 %>
 <!DOCTYPE html>
 <html>
@@ -20,10 +15,12 @@
 <style type="text/css">
 		a {
 	  		text-decoration: none;
-	  		color: black;
+	  		color: green;
 		}
 </style>
 <script type="text/javascript">
+	let to_id; // 받는 사람 아이디 - 사용자가 입력하는 것이 아니라 쪽지쓰기 row에서 자동으로 담기
+	let to_name; // 받는 사람 이름
 // 함수 선언은 head태그 안에서 한다
 // common-easyui_common.jsp
 
@@ -34,7 +31,7 @@
 		function login(){
 			const mem_id = $("#mem_id").val();
 			const mem_pw = $("#mem_pw").val();
-			location.href="./login.pj?mem_id="+mem_id+"&mem_pw="+mem_pw;
+			location.href="/member/login?mem_id="+mem_id+"&mem_pw="+mem_pw;
 		}
 		
 		function logout(){
@@ -65,7 +62,12 @@
 					// 오라클 서버에서 요청한 결과를 myBatis를 사용하면 자동으로 컬럼명이 대문자
 					// 단 List<XXVO>형태라면 그땐 소문자가 맞다.
 				method:"get"
-				,url:"/member/memberList.pj?type="+type+"&keyword="+keyword // 응답페이지는 JSON포맷의 파일이어야함(html이 아니라)
+				,url:"/member/jsonMemberList?type="+type+"&keyword="+keyword // 응답페이지는 JSON포맷의 파일이어야함(html이 아니라)
+				,onSelect: function(index, row){
+					to_id = row.MEM_ID; // data grid 선택시 해당 row의 id 담기
+					to_name = row.MEM_NAME; // data grid 선택시 해당 row의 이름 담기
+					console.log(to_id+" , "+to_name);
+				}
 				,onDblClickCell: function(index,field,value){
 						//console.log(index+", "+field+", "+value);
 						if("BUTTON" == field){
@@ -82,8 +84,25 @@
 			$("#d_member").hide();
 			$("#d_memberInsert").show();
 		}
+		function memoForm(){
+			console.log("memoForm 호출");
+			$("#dlg_memo").dialog({
+				title: "쪽지 쓰기",
+				href:"/memo/memoForm.jsp?to_id="+to_id+"&to_name="+to_name,
+				modal: true,
+				closed: true
+			});
+			$("#dlg_memo").dialog('open');
+		}
 		function memberDelete(){
 			alert('회원삭제 호출 성공');
+		}
+		function memoSend(){
+			console.log("쪽지 보내기");
+			$("#f_memo").submit();
+		}
+		function memoFormClose(){
+			$("#dlg_memo").dialog('close');			
 		}
 	</script>
 </head>
@@ -96,6 +115,8 @@
 
 		$("#d_member").hide();
 		$("#d_memberInsert").hide();
+		$("#mem_id").textbox('setValue','apple');
+		$("#mem_pw").textbox('setValue','123');
 
 	});
 </script>
@@ -107,7 +128,7 @@
 			<% 
 	// String s_name = (String)session.getAttribute("s_name");
 	//s_name = "이순신";
-	if(s_name == null){  	
+	if(smem_name == null){  	
 %>
 			<!--################# 로그인 영역 시작 #################-->
 			<div style="margin: 10px 0;"></div>
@@ -142,7 +163,7 @@
 %>
 			<!--################ 로그아웃 영역 시작 ###############-->
 			<div id="d_logout" align="center">
-				<div id="d_ok"><%=s_name%>님 환영합니다.
+				<div id="d_ok"><%=smem_name%>님 환영합니다.
 				</div>
 				<div style="margin: 3px 0"></div>
 				<a id="btn_logout" href="javascript:logout()"
@@ -152,13 +173,13 @@
 					정보수정 </a>
 			</div>
 			<!--################ 로그아웃 영역 끝 ###############-->
-			<% 
+<% 
 	} /////////////// end of 로그아웃
 %>
 			<!--################ 메뉴 영역 시작 ###############-->
 			<div style="margin: 20px 0;"></div>
 <% 
-	if(s_id != null){
+	if(smem_id != null){
 %>
 			<ul id="tre_gym" class="easyui-tree" style="margin: 0 6px">
 				<li data-options="state:'closed'">
@@ -240,6 +261,13 @@
 			</div>
 			
 		<!-- [[ 쪽지관리{받은 쪽지함, 보낸쪽지함} ]] -->
+			<div id="dlg_memo" footer="#btn_memo" class="easyui-dialog"
+			title="쪽지쓰기" data-options="modal:true,closed:true"
+			style="width: 600px; height: 400px; padding: 10px">
+				<div id="btn_memo" align="right">
+					<a href="javascript:memoFormClose()" class="easyui-linkbutton" iconCls="icon-clear">닫기</a>
+				</div>
+			</div>
 		</div>
 	</div>
 </body>
