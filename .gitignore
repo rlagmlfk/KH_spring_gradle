@@ -1,6 +1,6 @@
 .metadata
 Servers
 common
-demo
+**/src/main/webapp/demo/
 images
 themes
