@@ -168,6 +168,9 @@
 			// recieveMemoList();
 			// SPA는 과연 옳은 선택이였을까?
 			location.href="/auth/index.jsp"; // URL이 변경 -> 기존에 요청이 끊어지고 새로운 요청 - 세션이나 쿠키가 바뀐다.
+			/* setTimeout(function(){
+				location.reload();
+				},1000); */
 			$("#dlg_memoContent").dialog('close');			
 		}
 	</script>
