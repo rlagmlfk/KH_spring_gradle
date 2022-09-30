@@ -14,7 +14,20 @@
 <script type="text/javascript">
 	function makeInfo(result){
 		console.log(result);
+		// JSON.stringyfy는 왜 안써요? 이미 문자열인데
+		// stringyfy는 object출력될때만
+		const jsonDoc = JSON.parse(result); // Array 변환
 		let picHTML = "";
+		if(jsonDoc.length > 0){ // 조회결과가 있니?
+			for(let i=0;i<jsonDoc.length;i++){
+				picHTML += "<table>";
+				picHTML += "<tr><td><img width='80' height='80' src='/images/"+jsonDoc[i].p_img+"'/></td>";
+				picHTML += "<td>"+jsonDoc[i].p_info+"</td></tr>";
+				picHTML += "</table>";
+			}
+		}else{
+			picHTML += "조회결과가 없습니다.";	
+		}
 		return picHTML;
 	}
 	function startMethod(td){
@@ -25,6 +38,9 @@
 			    console.log(result); // JSON포맷 -> List<Map> -> String(java 코드) -> JS -> JSON.stringyfy, JSON.parse -> Array형전환
 				let picHTML = makeInfo(result);
 			    // 화면에 렌더링되기 전에 스타일 처리 선행되어야 함.
+			    $("#d_detail").css("border", "1px dotted #b0e0ef");
+			    $("#d_detail").css("left", td.offsetWidth+85+"px");
+			    $("#d_detail").css("top", td.offsetTop+20+"px");
 			    $("#d_detail").html(picHTML);
 			  }////// end of success
 			  ,error:function(e){
