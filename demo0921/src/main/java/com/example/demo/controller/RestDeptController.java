@@ -11,26 +11,27 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.example.demo.logic.DeptLogic;
 import com.example.demo.vo.DeptVO;
+import com.google.gson.Gson;
 
-@Controller
+@RestController // 리액트 연동할 때는 RestController를 사용함
 @RequestMapping("/dept/*")
-@SessionAttributes({"s_id","s_name"})
-public class DeptController {
-	Logger logger = LogManager.getLogger(DeptController.class);
+public class RestDeptController {
+	Logger logger = LogManager.getLogger(RestDeptController.class);
 	@Autowired
 	private DeptLogic deptLogic = null;
-	@GetMapping("deptList")
+	@GetMapping("jsonDeptList")
 	public String deptList(Model model, @RequestParam Map<String, Object> pMap) {
 		logger.info("deptList 호출성공");
-		List<DeptVO> deptList = null;
-		pMap.put("deptno", 20);
-		deptList = deptLogic.deptList2(pMap);
-		model.addAttribute("deptList", deptList);
-		//return "dept/deptList";
-		return "forward:deptList.jsp";
+		List<Map<String, Object>> deptList = null;
+		deptList = deptLogic.deptList(pMap);
+		String temp = null;
+		Gson g = new Gson();
+		temp = g.toJson(deptList);
+		return temp;
 	}
 }

@@ -15,9 +15,14 @@ public class DeptLogic {
 	Logger logger = LogManager.getLogger(DeptLogic.class);
 	@Autowired
 	private DeptDao deptDao = null;
-	public List<DeptVO> deptList(Map<String, Object> pMap) {
-		List<DeptVO> deptList = null;
+	public List<Map<String, Object>> deptList(Map<String, Object> pMap) {
+		List<Map<String, Object>> deptList = null;
 		deptList = deptDao.deptList(pMap);
+		return deptList;
+	}
+	public List<DeptVO> deptList2(Map<String, Object> pMap) {
+		List<DeptVO> deptList = null;
+		deptList = deptDao.deptList2(pMap);
 		return deptList;
 	}
 
