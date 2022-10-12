@@ -34,4 +34,5 @@ public class RestDeptController {
 		temp = g.toJson(deptList);
 		return temp;
 	}
+
 }

@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.example.demo.logic.DeptLogic;
@@ -32,5 +33,13 @@ public class DeptController {
 		model.addAttribute("deptList", deptList);
 		//return "dept/deptList";
 		return "forward:deptList.jsp";
+	}
+	@ResponseBody
+	@GetMapping("deptInsert")
+	public String deptInsert(@RequestParam Map<String,Object> pMap) {
+		logger.info("deptInsert호출 성공 : "+pMap);
+		int result = 0;
+		result = deptLogic.deptInsert(pMap);
+		return ""+result;
 	}
 }

@@ -35,4 +35,14 @@ public class DeptDao {
 		}
 		return deptList;
 	}
+	public int deptInsert(Map<String, Object> pMap) {
+		int result = 0;
+		try {
+			result = sqlSessionTemplate.update("deptInsert",pMap);
+			logger.info("result : "+result);
+		} catch (Exception e) {
+			logger.info("Exception : "+e.toString());
+		} 	
+		return result;
+	}
 }

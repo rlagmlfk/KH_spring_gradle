@@ -25,5 +25,11 @@ public class DeptLogic {
 		deptList = deptDao.deptList2(pMap);
 		return deptList;
 	}
+	public int deptInsert(Map<String, Object> pMap) {
+		logger.info("deptInsert호출");
+		int result = 0;
+		result = deptDao.deptInsert(pMap);
+		return result;
+	}
 
 }
