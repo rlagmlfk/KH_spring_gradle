@@ -42,4 +42,12 @@ public class DeptController {
 		result = deptLogic.deptInsert(pMap);
 		return ""+result;
 	}
+	@ResponseBody
+	@GetMapping("deptDelete")
+	public String deptDelete(@RequestParam Map<String,Object> pMap) {
+		logger.info("deptDelete호출 성공 : "+pMap);
+		int result = 0;
+		result = deptLogic.deptDelete(pMap);
+		return ""+result;
+	}
 }

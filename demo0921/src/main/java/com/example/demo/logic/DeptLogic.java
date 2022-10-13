@@ -31,5 +31,11 @@ public class DeptLogic {
 		result = deptDao.deptInsert(pMap);
 		return result;
 	}
+	public int deptDelete(Map<String, Object> pMap) {
+		logger.info("deptDelete호출");
+		int result = 0;
+		result = deptDao.deptDelete(pMap);
+		return result;
+	}
 
 }

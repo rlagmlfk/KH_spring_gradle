@@ -6,7 +6,7 @@
 	{key:[{DeptVO},{DeptVO},{DeptVO}]}
 	 -->
 	<select id="deptList" parameterType="map" resultType="java.util.Map">
-		SELECT deptno, dname, loc
+		SELECT deptno, dname, loc, filename, fileurl
 		  FROM dept
 		<where>
 	  		<if test='deptno != null'>
@@ -31,4 +31,8 @@
 	INSERT INTO dept(deptno, dname, loc, filename, fileurl)
 			VALUES( #{deptno},#{dname},#{loc},#{filename},#{fileurl} )
 	</insert>
+	<delete id="deptDelete" parameterType="map">
+		delete from dept
+		where deptno = #{deptno}
+	</delete>
 </mapper>
